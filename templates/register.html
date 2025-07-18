@@ -4,9 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - BahaWatch PH</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
     <style>
-        .register-container { max-width: 400px; margin: 40px auto; }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f8fafc 0%, #e3e6f3 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .register-container {
+            max-width: 400px;
+            margin: 40px auto;
+            padding: 32px 24px 24px 24px;
+            border-radius: 12px;
+            background: #fff;
+            box-shadow: 0 4px 24px rgba(44,44,44,0.08);
+        }
+        .brand-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .brand-icon i {
+            font-size: 48px;
+            color: #C41E3A;
+        }
+        .register-btn {
+            width: 100%;
+            margin-top: 12px;
+            background: #C41E3A;
+        }
+        .center-align a { color: #C41E3A; }
     </style>
 </head>
 <body>
@@ -16,7 +47,8 @@
         </div>
     </nav>
     <div class="container register-container z-depth-2">
-        <h5 class="center-align">Register</h5>
+        <div class="brand-icon"><i class="material-icons">person_add</i></div>
+        <h5 class="center-align" style="margin-bottom: 24px;">Register</h5>
         <form method="POST" action="/register">
             <div class="input-field">
                 <input id="name" name="name" type="text" required>
@@ -34,7 +66,7 @@
                 <input id="confirm_password" name="confirm_password" type="password" required>
                 <label for="confirm_password">Confirm Password</label>
             </div>
-            <button class="btn cardinal-red waves-effect waves-light" type="submit" style="width:100%">Register</button>
+            <button class="btn register-btn waves-effect waves-light" type="submit">Register</button>
         </form>
         <div class="center-align" style="margin-top: 16px;">
             <a href="/login">Already have an account? Login</a>

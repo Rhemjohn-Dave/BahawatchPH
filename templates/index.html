@@ -16,7 +16,7 @@
         }
         #mapid { height: 400px; width: 100%; margin-bottom: 20px; }
         @media (max-width: 600px) {
-            #mapid { height: 250px; }
+            #mapid { height: 350px; }
         }
     </style>
 </head>
@@ -112,5 +112,11 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <!-- Custom Map JS -->
     <script src="/static/js/map.js"></script>
+    <script>
+    // Center map on Bacolod City by default
+    if (typeof map !== 'undefined') {
+        map.setView([10.6765, 122.9511], 12);
+    }
+    </script>
 </body>
 </html> 

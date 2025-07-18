@@ -4,9 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - BahaWatch PH</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
     <style>
-        .login-container { max-width: 400px; margin: 40px auto; }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f8fafc 0%, #e3e6f3 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            max-width: 400px;
+            margin: 40px auto;
+            padding: 32px 24px 24px 24px;
+            border-radius: 12px;
+            background: #fff;
+            box-shadow: 0 4px 24px rgba(44,44,44,0.08);
+        }
+        .brand-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .brand-icon i {
+            font-size: 48px;
+            color: #C41E3A;
+        }
+        .login-btn {
+            width: 100%;
+            margin-top: 12px;
+            background: #C41E3A;
+        }
+        .center-align a { color: #C41E3A; }
     </style>
 </head>
 <body>
@@ -16,7 +47,8 @@
         </div>
     </nav>
     <div class="container login-container z-depth-2">
-        <h5 class="center-align">Login</h5>
+        <div class="brand-icon"><i class="material-icons">lock</i></div>
+        <h5 class="center-align" style="margin-bottom: 24px;">Login</h5>
         <form method="POST" action="/login">
             <div class="input-field">
                 <input id="email" name="email" type="email" required>
@@ -26,7 +58,7 @@
                 <input id="password" name="password" type="password" required>
                 <label for="password">Password</label>
             </div>
-            <button class="btn cardinal-red waves-effect waves-light" type="submit" style="width:100%">Login</button>
+            <button class="btn login-btn waves-effect waves-light" type="submit">Login</button>
         </form>
         <div class="center-align" style="margin-top: 16px;">
             <a href="/register">Don't have an account? Register</a>
