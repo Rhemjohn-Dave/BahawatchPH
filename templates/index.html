@@ -24,6 +24,7 @@
             <a href="#" class="brand-logo center">BahaWatch PH</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 {% if user_name %}
+                    <li><a href="/report">Report</a></li>
                     {% if user_role == 'admin' %}
                         <li><a href="/admin">Approve Reports</a></li>
                     {% endif %}
