@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BahaWatch PH</title>
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Materialize CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
     <!-- Leaflet CSS -->
@@ -22,6 +24,7 @@
     <nav class="cardinal-red">
         <div class="nav-wrapper">
             <a href="#" class="brand-logo center">BahaWatch PH</a>
+            <a href="#" data-target="mobile-nav" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 {% if user_name %}
                     <li><a href="/report">Report</a></li>
@@ -36,6 +39,18 @@
             </ul>
         </div>
     </nav>
+    <ul class="sidenav" id="mobile-nav">
+        {% if user_name %}
+            <li><a href="/report">Report</a></li>
+            {% if user_role == 'admin' %}
+                <li><a href="/admin">Approve Reports</a></li>
+            {% endif %}
+            <li><span style="color:black;">Hello, {{ user_name }}</span></li>
+            <li><a href="/logout">Logout</a></li>
+        {% else %}
+            <li><a href="/login">Login</a></li>
+        {% endif %}
+    </ul>
     <div class="container">
         <h5 class="center-align">Flood Monitoring Dashboard</h5>
         <div id="mapid"></div>
@@ -87,6 +102,12 @@
     </div>
     <!-- Materialize JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.sidenav');
+        M.Sidenav.init(elems);
+    });
+    </script>
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <!-- Custom Map JS -->
