@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - BahaWatch PH</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <style>
+        .register-container { max-width: 400px; margin: 40px auto; }
+    </style>
+</head>
+<body>
+    <nav class="cardinal-red">
+        <div class="nav-wrapper">
+            <a href="/" class="brand-logo center">BahaWatch PH</a>
+        </div>
+    </nav>
+    <div class="container register-container z-depth-2">
+        <h5 class="center-align">Register</h5>
+        <form method="POST" action="/register">
+            <div class="input-field">
+                <input id="name" name="name" type="text" required>
+                <label for="name">Name</label>
+            </div>
+            <div class="input-field">
+                <input id="email" name="email" type="email" required>
+                <label for="email">Email</label>
+            </div>
+            <div class="input-field">
+                <input id="password" name="password" type="password" required>
+                <label for="password">Password</label>
+            </div>
+            <div class="input-field">
+                <input id="confirm_password" name="confirm_password" type="password" required>
+                <label for="confirm_password">Confirm Password</label>
+            </div>
+            <button class="btn cardinal-red waves-effect waves-light" type="submit" style="width:100%">Register</button>
+        </form>
+        <div class="center-align" style="margin-top: 16px;">
+            <a href="/login">Already have an account? Login</a>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html> 

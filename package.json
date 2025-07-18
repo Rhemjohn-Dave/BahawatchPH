@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "pagasa-parser": "^2.2.4"
+  }
+}

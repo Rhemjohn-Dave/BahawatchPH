@@ -1,0 +1,135 @@
+{% macro flash_js_array(messages) -%}[{% for category, message in messages -%}{"category": "{{ category }}", "message": {{ message|tojson }} }{% if not loop.last %},{% endif %}{% endfor %}]{%- endmacro %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - BahaWatch PH</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <style>
+        .admin-img { max-width: 100px; max-height: 80px; }
+        .action-btns { display: flex; gap: 8px; }
+        @media (max-width: 600px) {
+            .admin-img { max-width: 60px; max-height: 40px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="cardinal-red">
+        <div class="nav-wrapper">
+            <a href="/" class="brand-logo center">BahaWatch PH Admin</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                {% if user_name %}
+                    <li><span style="color:white; margin-right:10px;">Hello, {{ user_name }}</span></li>
+                    <li><a href="/logout">Logout</a></li>
+                {% else %}
+                    <li><a href="/login">Login</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h5 class="center-align">Admin Panel</h5>
+        {% if user_role == 'admin' %}
+        <form id="update-cyclone-form" method="POST" action="/admin/update-cyclone" style="margin-bottom: 24px; text-align:center;">
+            <button id="update-cyclone-btn" class="btn blue waves-effect waves-light" type="submit">Update Cyclone-Affected Areas</button>
+            <div id="preloader" class="preloader-wrapper small active" style="display:none; vertical-align: middle; margin-left: 10px;">
+                <div class="spinner-layer spinner-blue-only">
+                    <div class="circle-clipper left"><div class="circle"></div></div>
+                    <div class="gap-patch"><div class="circle"></div></div>
+                    <div class="circle-clipper right"><div class="circle"></div></div>
+                </div>
+            </div>
+        </form>
+        {% endif %}
+        <h6>Pending Reports</h6>
+        <table class="highlight responsive-table">
+            <thead>
+                <tr>
+                    <th>Area</th>
+                    <th>Status</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                    <th>Timestamp</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in pending_reports %}
+                <tr>
+                    <td>{{ r.area }}</td>
+                    <td>{{ r.status }}</td>
+                    <td>{{ r.description }}</td>
+                    <td>{% if r.image_url %}<img src="{{ r.image_url }}" class="admin-img">{% endif %}</td>
+                    <td>{{ r.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td class="action-btns">
+                        <form method="POST" action="/admin/approve/{{ r.id }}" style="display:inline">
+                            <button class="btn-small green" type="submit">Approve</button>
+                        </form>
+                        <form method="POST" action="/admin/delete/{{ r.id }}" style="display:inline">
+                            <button class="btn-small red" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h6>Approved Reports</h6>
+        <table class="highlight responsive-table">
+            <thead>
+                <tr>
+                    <th>Area</th>
+                    <th>Status</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                    <th>Timestamp</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in approved_reports %}
+                <tr>
+                    <td>{{ r.area }}</td>
+                    <td>{{ r.status }}</td>
+                    <td>{{ r.description }}</td>
+                    <td>{% if r.image_url %}<img src="{{ r.image_url }}" class="admin-img">{% endif %}</td>
+                    <td>{{ r.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td class="action-btns">
+                        <form method="POST" action="/admin/update/{{ r.id }}" style="display:inline">
+                            <button class="btn-small orange" type="submit">Update</button>
+                        </form>
+                        <form method="POST" action="/admin/delete/{{ r.id }}" style="display:inline">
+                            <button class="btn-small red" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var form = document.getElementById('update-cyclone-form');
+        if (form) {
+            form.addEventListener('submit', function() {
+                document.getElementById('update-cyclone-btn').disabled = true;
+                document.getElementById('preloader').style.display = 'inline-block';
+            });
+        }
+    });
+    </script>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var flashMessages = {{ flash_js_array(messages) | safe }};
+        flashMessages.forEach(function(msg) {
+            M.toast({html: msg.message, classes: msg.category});
+        });
+    });
+    </script>
+    {% endif %}
+    {% endwith %}
+</body>
+</html> 

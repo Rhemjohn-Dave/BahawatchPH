@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Flood - BahaWatch PH</title>
+    <!-- Materialize CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #mapid { height: 250px; width: 100%; margin-bottom: 20px; }
+        .preview-img { max-width: 100%; max-height: 200px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <nav class="cardinal-red">
+        <div class="nav-wrapper">
+            <a href="/" class="brand-logo center">BahaWatch PH</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                {% if user_name %}
+                    <li><span style="color:white; margin-right:10px;">Hello, {{ user_name }}</span></li>
+                    <li><a href="/logout">Logout</a></li>
+                {% else %}
+                    <li><a href="/login">Login</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h5 class="center-align">Submit Flood Report</h5>
+        <form id="report-form" method="POST" action="/report" enctype="multipart/form-data">
+            <div class="input-field">
+                <input id="area" name="area" type="text" required>
+                <label for="area">Area Name</label>
+            </div>
+            <div class="input-field">
+                <textarea id="description" name="description" class="materialize-textarea" required></textarea>
+                <label for="description">Description</label>
+            </div>
+            <div class="input-field">
+                <select id="status" name="status" required>
+                    <option value="" disabled selected>Choose status</option>
+                    <option value="Safe">Safe</option>
+                    <option value="Alert">Alert</option>
+                    <option value="Flooded">Flooded</option>
+                </select>
+                <label for="status">Flood Status</label>
+            </div>
+            <div class="file-field input-field">
+                <div class="btn cardinal-red">
+                    <span>Image</span>
+                    <input type="file" id="image" name="image" accept="image/*" required>
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text" placeholder="Upload a photo of the flood">
+                </div>
+                <img id="img-preview" class="preview-img" style="display:none;" />
+            </div>
+            <div id="mapid"></div>
+            <div class="row">
+                <div class="input-field col s6">
+                    <input id="lat" name="lat" type="text" required readonly>
+                    <label for="lat">Latitude</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="lng" name="lng" type="text" required readonly>
+                    <label for="lng">Longitude</label>
+                </div>
+            </div>
+            <button class="btn cardinal-red waves-effect waves-light" type="submit" style="width:100%">Submit Report</button>
+        </form>
+    </div>
+    <!-- Materialize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('select');
+        M.FormSelect.init(elems);
+    });
+
+    // Geolocation and map
+    let map, marker;
+    function setLatLng(lat, lng) {
+        document.getElementById('lat').value = lat;
+        document.getElementById('lng').value = lng;
+        if (marker) {
+            marker.setLatLng([lat, lng]);
+        } else {
+            marker = L.marker([lat, lng], {draggable:true}).addTo(map);
+            marker.on('dragend', function(e) {
+                const pos = marker.getLatLng();
+                setLatLng(pos.lat, pos.lng);
+            });
+        }
+    }
+    function initMap(lat, lng) {
+        map = L.map('mapid').setView([lat, lng], 16);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        setLatLng(lat, lng);
+        map.on('click', function(e) {
+            setLatLng(e.latlng.lat, e.latlng.lng);
+        });
+    }
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(pos) {
+            initMap(pos.coords.latitude, pos.coords.longitude);
+        }, function() {
+            // Default to Manila if denied
+            initMap(14.5995, 120.9842);
+        });
+    } else {
+        initMap(14.5995, 120.9842);
+    }
+
+    // Image preview
+    document.getElementById('image').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                const img = document.getElementById('img-preview');
+                img.src = ev.target.result;
+                img.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    </script>
+</body>
+</html> 

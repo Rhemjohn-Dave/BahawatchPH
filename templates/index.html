@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BahaWatch PH</title>
+    <!-- Materialize CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        .cardinal-red {
+            background-color: #C41E3A !important;
+        }
+        #mapid { height: 400px; width: 100%; margin-bottom: 20px; }
+        @media (max-width: 600px) {
+            #mapid { height: 250px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="cardinal-red">
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo center">BahaWatch PH</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                {% if user_name %}
+                    {% if user_role == 'admin' %}
+                        <li><a href="/admin">Approve Reports</a></li>
+                    {% endif %}
+                    <li><span style="color:white; margin-right:10px;">Hello, {{ user_name }}</span></li>
+                    <li><a href="/logout">Logout</a></li>
+                {% else %}
+                    <li><a href="/login">Login</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h5 class="center-align">Flood Monitoring Dashboard</h5>
+        <div id="mapid"></div>
+        <div class="row">
+            <div class="col s12 m6">
+                <div class="card-panel">
+                    <b>Legend:</b><br>
+                    <span style="color:green">●</span> Safe<br>
+                    <span style="color:orange">●</span> Alert<br>
+                    <span style="color:red">●</span> Flooded<br>
+                    <span style="color:blue">●</span> Cyclone-Affected Area
+                </div>
+            </div>
+        </div>
+        <div id="cyclone-bulletin-section">
+            {% if cyclone_bulletin %}
+            <div class="card-panel blue lighten-4">
+                <h6><b>{{ cyclone_bulletin }}</b></h6>
+                <div><b>Storm Name:</b> {{ cyclone_storm_name }}</div>
+                <div><b>Issue Time:</b> {{ cyclone_issue_time }}</div>
+                <div><b>Summary:</b> {{ cyclone_summary }}</div>
+                <div><b>Relevant Hazards:</b>
+                    <ul>
+                        {% for hazard in cyclone_hazards %}
+                        <li>{{ hazard }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div id="status-table-section">
+            <h6>Status Table</h6>
+            <table class="highlight responsive-table" id="status-table">
+                <thead>
+                    <tr>
+                        <th>Area</th>
+                        <th>Status</th>
+                        <th>Type</th>
+                        <th>Rainfall (mm)</th>
+                        <th>Last Updated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table rows will be populated by JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Materialize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Custom Map JS -->
+    <script src="/static/js/map.js"></script>
+</body>
+</html> 
