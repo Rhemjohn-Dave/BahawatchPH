@@ -17,7 +17,7 @@ db.init_app(app)
 
 migrate = Migrate(app, db)
 
-UPLOAD_FOLDER = os.path.join('static', 'uploads')
+UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'static', 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -138,7 +138,7 @@ def report():
             image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
             image.save(image_path)
-            image_url = '/' + image_path.replace('\\', '/')
+            image_url = '/static/uploads/' + filename
         report = Report(
             area=area,
             lat=float(lat),
@@ -236,7 +236,7 @@ def admin_update(report_id):
 def update_cyclone():
     import subprocess
     try:
-        result = subprocess.run(['python', 'utils/pagasa_cyclone_scraper.py'], capture_output=True, text=True, check=True)
+        result = subprocess.run(['python', '/home/rhemjohn/BahawatchPH/utils/pagasa_cyclone_scraper.py'], capture_output=True, text=True, check=True)
         flash('Cyclone-Affected Areas updated!\n' + result.stdout, 'success')
     except subprocess.CalledProcessError as e:
         flash('Error updating Cyclone-Affected Areas: ' + e.stderr, 'danger')
